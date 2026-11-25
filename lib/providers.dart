@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'data/auth.dart';
 import 'data/device_settings.dart';
 import 'data/feedback_ai.dart';
+import 'data/gemini_ai.dart';
 import 'data/repository.dart';
 import 'data/store.dart';
 
@@ -26,5 +27,10 @@ final deviceProvider = ChangeNotifierProvider<DeviceSettings>((ref) {
   return DeviceSettings(ref.watch(prefsProvider), teacherId);
 });
 
-/// Генератор фідбеку. Після підключення Firebase тут буде Gemini (firebase_ai).
-final feedbackAiProvider = Provider<FeedbackAi>((ref) => const UnconfiguredAi());
+/// true, якщо Firebase успішно ініціалізовано в main(). Підміняється там же.
+final firebaseReadyProvider = Provider<bool>((ref) => false);
+
+/// Генератор фідбеку: Gemini через Firebase AI Logic, якщо Firebase налаштовано.
+final feedbackAiProvider = Provider<FeedbackAi>(
+  (ref) => ref.watch(firebaseReadyProvider) ? const GeminiFeedbackAi() : const UnconfiguredAi(),
+);

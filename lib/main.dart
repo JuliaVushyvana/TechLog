@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,7 +11,25 @@ import 'ui/theme.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final prefs = await SharedPreferences.getInstance();
-  runApp(ProviderScope(overrides: [prefsProvider.overrideWithValue(prefs)], child: const TeachLogApp()));
+  final firebaseReady = await _initFirebase();
+  runApp(
+    ProviderScope(
+      overrides: [prefsProvider.overrideWithValue(prefs), firebaseReadyProvider.overrideWithValue(firebaseReady)],
+      child: const TeachLogApp(),
+    ),
+  );
+}
+
+/// Ініціалізує Firebase. Поки проєкт не налаштовано (`flutterfire configure`),
+/// застосунок працює без нього, а AI-фідбек показує підказку.
+Future<bool> _initFirebase() async {
+  try {
+    await Firebase.initializeApp();
+    return true;
+  } catch (e) {
+    debugPrint('Firebase не налаштовано: $e');
+    return false;
+  }
 }
 
 class TeachLogApp extends ConsumerWidget {
