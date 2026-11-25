@@ -70,5 +70,16 @@ void main() {
 
     // Android 12+: система сама кладе біле коло 640px, значок має вміститися в нього.
     await _render(tester, 'assets/splash/splash_android12.png', 960, const Center(child: LogoMark(size: 420)));
+
+    // Web: значок вкладки й PWA без фону. Малюнок займає ~81% LogoMark, тож
+    // збільшуємо його, щоб два вікна заповнили весь квадрат.
+    for (final (path, size) in [('web/favicon.png', 64.0), ('web/icons/Icon-192.png', 192.0), ('web/icons/Icon-512.png', 512.0)]) {
+      await _render(
+        tester,
+        path,
+        size,
+        OverflowBox(maxWidth: double.infinity, maxHeight: double.infinity, child: LogoMark(size: size / .8)),
+      );
+    }
   });
 }

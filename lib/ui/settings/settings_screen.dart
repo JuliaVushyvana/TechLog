@@ -121,51 +121,25 @@ Future<void> _seed(BuildContext context, WidgetRef ref) async {
   }
 }
 
-/// Грейд: зі списку або своя назва.
+/// Грейд: Junior / Middle / Senior.
 class _GradePicker extends ConsumerWidget {
   const _GradePicker();
-
-  static const _custom = '__custom__';
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final device = ref.watch(deviceProvider);
-    final grades = [...defaultGrades, if (!defaultGrades.contains(device.grade)) device.grade];
     return InputDecorator(
       decoration: const InputDecoration(
         labelText: 'Грейд',
         contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
       ),
       child: DropdownButton<String>(
-        value: device.grade,
+        value: defaultGrades.contains(device.grade) ? device.grade : null,
         isExpanded: true,
         underline: const SizedBox(),
-        items: [
-          for (final g in grades) DropdownMenuItem(value: g, child: Text(g)),
-          const DropdownMenuItem(value: _custom, child: Text('Своя назва…')),
-        ],
-        onChanged: (v) async {
-          if (v == null) return;
-          if (v != _custom) return device.setGrade(v);
-          final controller = TextEditingController();
-          final name = await showDialog<String>(
-            context: context,
-            builder: (ctx) => AlertDialog(
-              title: const Text('Свій грейд'),
-              content: TextField(
-                controller: controller,
-                autofocus: true,
-                decoration: const InputDecoration(hintText: 'Наприклад: Lead'),
-                onSubmitted: (t) => Navigator.pop(ctx, t),
-              ),
-              actions: [
-                TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Скасувати')),
-                FilledButton(onPressed: () => Navigator.pop(ctx, controller.text), child: const Text('Зберегти')),
-              ],
-            ),
-          );
-          controller.dispose();
-          if (name != null && name.trim().isNotEmpty) device.setGrade(name);
+        items: [for (final g in defaultGrades) DropdownMenuItem(value: g, child: Text(g))],
+        onChanged: (v) {
+          if (v != null) device.setGrade(v);
         },
       ),
     );

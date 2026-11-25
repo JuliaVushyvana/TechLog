@@ -32,7 +32,10 @@ final storeProvider = ChangeNotifierProvider<AppStore>((ref) {
 
 final deviceProvider = ChangeNotifierProvider<DeviceSettings>((ref) {
   final teacherId = ref.watch(authProvider.select((a) => a.user?.id));
-  return DeviceSettings(ref.watch(prefsProvider), teacherId);
+  final email = ref.read(authProvider).user?.email;
+  // Debug: демо-акаунт за замовчуванням Senior.
+  final grade = kDebugMode && email == demoEmail ? 'Senior' : 'Junior';
+  return DeviceSettings(ref.watch(prefsProvider), teacherId, defaultGrade: grade);
 });
 
 /// true, якщо Firebase успішно ініціалізовано в main(). Підміняється там же.

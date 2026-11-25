@@ -23,9 +23,9 @@ const defaultGrades = ['Junior', 'Middle', 'Senior'];
 /// Налаштування, що живуть лише на цьому телефоні (shared_preferences):
 /// типи занять, грейд, параметри AI-фідбеку.
 class DeviceSettings extends ChangeNotifier {
-  DeviceSettings(this._prefs, String? teacherId) : _suffix = '_${teacherId ?? 'guest'}' {
+  DeviceSettings(this._prefs, String? teacherId, {String defaultGrade = 'Junior'}) : _suffix = '_${teacherId ?? 'guest'}' {
     types = _prefs.getStringList('tl_types$_suffix') ?? [...defaultLessonTypes];
-    grade = _prefs.getString('tl_grade$_suffix') ?? 'Junior';
+    grade = _prefs.getString('tl_grade$_suffix') ?? defaultGrade;
     final ai = _prefs.getString('tl_ai$_suffix');
     this.ai = ai == null ? AiSettings() : AiSettings.fromJson(jsonDecode(ai));
   }
