@@ -212,9 +212,10 @@ class _Chip extends StatelessWidget {
         borderRadius: BorderRadius.circular(4),
         border: Border(left: BorderSide(color: tl.dir(s?.dir), width: 3)),
       ),
+      // Клітинка вузька: ім'я і прізвище — кожне на своєму рядку.
       child: Text(
-        s?.firstName ?? '—',
-        maxLines: 1,
+        s?.name.trim().split(RegExp(r'\s+')).join('\n') ?? '—',
+        maxLines: 3,
         overflow: TextOverflow.clip,
         style: TextStyle(
           fontSize: 9.5,

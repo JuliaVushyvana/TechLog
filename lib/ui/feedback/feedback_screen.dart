@@ -313,7 +313,7 @@ class _FeedbackScreenState extends ConsumerState<FeedbackScreen> {
                   onPressed: _text.text.trim().isEmpty
                       ? null
                       : () => SharePlus.instance.share(
-                          ShareParams(text: _text.text, subject: 'Фідбек: ${s.firstName}, ${data.monthLabel}'),
+                          ShareParams(text: _text.text, subject: 'Фідбек: ${s.name}, ${data.monthLabel}'),
                         ),
                   icon: const Icon(Icons.share, size: 18),
                   label: const Text('Поділитися'),
@@ -368,7 +368,7 @@ class _StudentPill extends StatelessWidget {
             children: [
               StudentAvatar(student, size: 26),
               const SizedBox(width: 6),
-              Text(student.firstName, style: const TextStyle(fontWeight: FontWeight.w800)),
+              Text(student.name, style: const TextStyle(fontWeight: FontWeight.w800)),
               const SizedBox(width: 4),
               if (busy)
                 const SizedBox.square(dimension: 14, child: CircularProgressIndicator(strokeWidth: 2))
