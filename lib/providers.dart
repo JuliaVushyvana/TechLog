@@ -38,7 +38,10 @@ final deviceProvider = ChangeNotifierProvider<DeviceSettings>((ref) {
 /// true, якщо Firebase успішно ініціалізовано в main(). Підміняється там же.
 final firebaseReadyProvider = Provider<bool>((ref) => false);
 
-/// Генератор фідбеку: Gemini через Firebase AI Logic, якщо Firebase налаштовано.
-final feedbackAiProvider = Provider<FeedbackAi>(
-  (ref) => ref.watch(firebaseReadyProvider) ? const GeminiFeedbackAi() : const UnconfiguredAi(),
-);
+/// Генератор фідбеку: Gemini через Firebase AI Logic, якщо Firebase налаштовано;
+/// інакше — Gemini API з ключем з налаштувань фідбеку; інакше AI недоступний.
+final feedbackAiProvider = Provider<FeedbackAi>((ref) {
+  if (ref.watch(firebaseReadyProvider)) return const GeminiFeedbackAi();
+  final key = ref.watch(deviceProvider.select((d) => d.ai.apiKey));
+  return key.isNotEmpty ? GeminiKeyFeedbackAi(key) : const UnconfiguredAi();
+});

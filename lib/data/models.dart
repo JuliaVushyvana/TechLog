@@ -233,6 +233,7 @@ class AiSettings {
     this.language = 'Українська',
     this.signature = '',
     this.extra = '',
+    this.apiKey = '',
   });
 
   String tone;
@@ -240,6 +241,9 @@ class AiSettings {
   String language;
   String signature;
   String extra;
+
+  /// Ключ Gemini API з Google AI Studio (лише на цьому телефоні, у коді його немає).
+  String apiKey;
 
   static const tones = {
     'Теплий': 'теплий, підтримуючий, дружній',
@@ -255,6 +259,7 @@ class AiSettings {
     'language': language,
     'signature': signature,
     'extra': extra,
+    'apiKey': apiKey,
   };
 
   factory AiSettings.fromJson(Map<String, dynamic> j) => AiSettings(
@@ -263,5 +268,6 @@ class AiSettings {
     language: j['language'] ?? 'Українська',
     signature: j['signature'] ?? '',
     extra: j['extra'] ?? '',
+    apiKey: j['apiKey'] ?? '',
   );
 }

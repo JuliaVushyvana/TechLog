@@ -17,11 +17,14 @@ class _AiSettingsCardState extends ConsumerState<AiSettingsCard> {
   late final AiSettings _ai = ref.read(deviceProvider).ai;
   late final _signature = TextEditingController(text: _ai.signature);
   late final _extra = TextEditingController(text: _ai.extra);
+  late final _key = TextEditingController(text: _ai.apiKey);
+  bool _showKey = false;
 
   @override
   void dispose() {
     _signature.dispose();
     _extra.dispose();
+    _key.dispose();
     super.dispose();
   }
 
@@ -45,6 +48,8 @@ class _AiSettingsCardState extends ConsumerState<AiSettingsCard> {
       child: Theme(
         data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
         child: ExpansionTile(
+          // Без ключа (і без Firebase) картка відкрита, щоб було видно, куди його вставити.
+          initiallyExpanded: !ref.read(feedbackAiProvider).available,
           shape: const RoundedRectangleBorder(),
           tilePadding: const EdgeInsets.symmetric(horizontal: 18),
           childrenPadding: const EdgeInsets.fromLTRB(18, 0, 18, 18),
@@ -78,7 +83,26 @@ class _AiSettingsCardState extends ConsumerState<AiSettingsCard> {
               onChanged: (v) => _update((a) => a.extra = v.trim()),
             ),
             const SizedBox(height: 8),
-            const MutedText('Зберігається лише на цьому телефоні.'),
+            const SizedBox(height: 16),
+            TextField(
+              controller: _key,
+              obscureText: !_showKey,
+              autocorrect: false,
+              enableSuggestions: false,
+              decoration: InputDecoration(
+                labelText: 'Ключ Gemini API',
+                hintText: 'Вставте ключ з aistudio.google.com/apikey',
+                helperText: 'Безкоштовний. Потрібен, поки не підключено Firebase.',
+                suffixIcon: IconButton(
+                  tooltip: _showKey ? 'Сховати' : 'Показати',
+                  icon: Icon(_showKey ? Icons.visibility_off_outlined : Icons.visibility_outlined),
+                  onPressed: () => setState(() => _showKey = !_showKey),
+                ),
+              ),
+              onChanged: (v) => _update((a) => a.apiKey = v.trim()),
+            ),
+            const SizedBox(height: 8),
+            const MutedText('Усе тут, разом із ключем, зберігається лише на цьому телефоні.'),
           ],
         ),
       ),

@@ -88,7 +88,8 @@ class _FeedbackScreenState extends ConsumerState<FeedbackScreen> {
       if (mounted && _loadedKey == '${s.id}|${data.month}') _text.text = text.trim();
       return true;
     } catch (e) {
-      if (mounted) _snack(e is AiUnavailable ? '$e' : 'Не вдалося згенерувати фідбек: $e');
+      final reason = '$e'.replaceFirst('Exception: ', '');
+      if (mounted) _snack(e is AiUnavailable ? reason : 'Не вдалося згенерувати фідбек: $reason');
       return false;
     } finally {
       if (mounted) setState(() => _busy.remove(s.id));
@@ -154,8 +155,9 @@ class _FeedbackScreenState extends ConsumerState<FeedbackScreen> {
             padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(color: tl.warn, borderRadius: BorderRadius.circular(14)),
             child: const Text(
-              'AI ще не підключено (потрібен Firebase). Поки що натисніть «Скопіювати запит», '
-              'вставте його в чат з AI, а готовий текст — у поле фідбеку. Він збережеться в архів учня.',
+              'AI ще не підключено. Вставте безкоштовний ключ Gemini API у «Налаштуваннях фідбеку» внизу '
+              '(його можна отримати на aistudio.google.com/apikey). Або натисніть «Скопіювати запит», '
+              'вставте його в чат з AI, а готовий текст — у поле фідбеку.',
             ),
           ),
         if (list.isEmpty)
