@@ -4,9 +4,9 @@ import '../utils.dart';
 import 'models.dart';
 import 'store.dart';
 
-const demoEmail = 'demo@teachlog.app';
+const demoEmail = 'juliafen22@gmail.com';
 const demoPassword = 'demo123';
-const demoName = 'Олена Демченко';
+const demoName = 'Юлія';
 
 const _topics = {
   'Roblox': [
@@ -177,7 +177,7 @@ void seedDemoData(AppStore store) {
         'Варто ще потренувати уважність до деталей у коді — інколи через дрібну помилку скрипт не запускається.\n\n'
         'Удома радимо разом пограти в його гру й попросити пояснити, як вона працює. '
         'Це чудово закріплює матеріал.\n\n'
-        'Дякую, що ви з нами!\nЗ повагою, Олена',
+        'Дякую, що ви з нами!\nЗ повагою, Юлія',
   );
 
   store.changed();
