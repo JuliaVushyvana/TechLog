@@ -27,7 +27,6 @@ class _TrainersScreenState extends ConsumerState<TrainersScreen> {
   Trainer _trainer = trainers.first;
   Map<String, String> _values = trainers.first.defaults();
   final _time = TextEditingController();
-  final _correct = TextEditingController();
   final _form = GlobalKey<FormState>();
 
   /// Набір налаштувань, для якого показано графік.
@@ -36,7 +35,6 @@ class _TrainersScreenState extends ConsumerState<TrainersScreen> {
   @override
   void dispose() {
     _time.dispose();
-    _correct.dispose();
     super.dispose();
   }
 
@@ -59,7 +57,6 @@ class _TrainersScreenState extends ConsumerState<TrainersScreen> {
   Future<void> _save(AppStore store) async {
     if (!_form.currentState!.validate()) return;
     final time = double.parse(_time.text.replaceAll(',', '.'));
-    final total = int.tryParse(_values['ans'] ?? '');
     final r = TrainerResult(
       id: newId(),
       studentId: _studentId!,
@@ -67,12 +64,9 @@ class _TrainersScreenState extends ConsumerState<TrainersScreen> {
       settings: {..._values},
       date: iso(today()),
       timeSec: time,
-      correct: _trainer.hasCorrect ? int.tryParse(_correct.text) : null,
-      total: _trainer.hasCorrect ? total : null,
     );
     final record = store.addResult(r);
     _time.clear();
-    _correct.clear();
     FocusScope.of(context).unfocus();
     setState(() => _chartKey = _trainer.settingsKey(r.settings));
     if (record) {
@@ -138,7 +132,6 @@ class _TrainersScreenState extends ConsumerState<TrainersScreen> {
 
   Widget _newResultCard(AppStore store, List<Student> students, Student student) {
     final tl = context.tl;
-    final total = _values['ans'];
     return SectionCard(
       title: 'Новий результат',
       child: Form(
@@ -217,26 +210,6 @@ class _TrainersScreenState extends ConsumerState<TrainersScreen> {
                     },
                   ),
                 ),
-                if (_trainer.hasCorrect) ...[
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: TextFormField(
-                      controller: _correct,
-                      decoration: InputDecoration(
-                        labelText: 'Правильно',
-                        suffixText: total == null ? null : 'з $total',
-                      ),
-                      keyboardType: TextInputType.number,
-                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                      validator: (v) {
-                        final n = int.tryParse(v ?? '');
-                        final max = int.tryParse(total ?? '');
-                        if (n != null && max != null && n > max) return 'Не більше $max';
-                        return null;
-                      },
-                    ),
-                  ),
-                ],
               ],
             ),
             const SizedBox(height: 14),
@@ -475,8 +448,7 @@ class _HistoryCard extends StatelessWidget {
                   ListTile(
                     contentPadding: EdgeInsets.zero,
                     title: Text(
-                      '${trainerBy(r.trainer).name} · ${fmtSec(r.timeSec)} с'
-                      '${r.correct == null ? '' : ' · ${r.correct}${r.total == null ? '' : '/${r.total}'}'}',
+                      '${trainerBy(r.trainer).name} · ${fmtSec(r.timeSec)} с',
                       style: const TextStyle(fontWeight: FontWeight.w800),
                     ),
                     subtitle: Text('${fd(r.date)} · ${trainerBy(r.trainer).settingsLabel(r.settings)}'),

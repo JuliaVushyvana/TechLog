@@ -7,14 +7,10 @@ class TrainerField {
 }
 
 class Trainer {
-  const Trainer(this.key, this.name, this.fields, {this.hasCorrect = false});
+  const Trainer(this.key, this.name, this.fields);
   final String key;
   final String name;
   final List<TrainerField> fields;
-  final bool hasCorrect;
-
-  /// Поле, що задає кількість відповідей (для «Правильно X з Y»).
-  TrainerField? get answersField => fields.where((f) => f.key == 'ans').firstOrNull;
 
   String settingsKey(Map<String, String> s) => '$key|${fields.map((f) => s[f.key]).join('/')}';
   String settingsLabel(Map<String, String> s) => fields.map((f) => '${f.label}: ${s[f.key]}').join(', ');
@@ -33,20 +29,20 @@ final trainers = <Trainer>[
     const TrainerField('dir', 'Напрямок', ['Число → Абакус', 'Абакус → Число']),
     const TrainerField('mode', 'Режим', ['Тренування', 'Випробування']),
     TrainerField('ans', 'Відповіді', _rg(15, 50)),
-  ], hasCorrect: true),
+  ]),
   Trainer('cols', 'Стовпці', [
     const TrainerField('form', 'Формула', _formula),
     const TrainerField('nums', 'Числа', ['1-9', '10-99', '100-999', '1000-9999']),
     TrainerField('terms', 'К-ть доданків', _rg(2, 10)),
     TrainerField('ans', 'Відповіді', _rg(5, 30)),
-  ], hasCorrect: true),
+  ]),
   Trainer('mental', 'Ментальна арифметика', [
     const TrainerField('form', 'Формула', _formula),
     const TrainerField('num', 'Число', ['1-9', '10-99', '100-999']),
     TrainerField('acts', 'Дії', _rg(2, 25)),
     TrainerField('ans', 'Відповіді', _rg(5, 30)),
     const TrainerField('spd', 'Швидкість, с', _speed),
-  ], hasCorrect: true),
+  ]),
   const Trainer('shulte', 'Таблиця Шульте', [
     TrainerField('mode', 'Режим', ['Цифри', 'Літери']),
     TrainerField('field', 'Поле', ['3×3', '4×4', '5×5', '6×6', '7×7', '8×8']),

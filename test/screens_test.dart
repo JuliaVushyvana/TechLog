@@ -80,8 +80,6 @@ void main() {
           settings: {'axes': '1', 'nums': '4-4', 'dir': 'Число → Абакус', 'mode': 'Тренування', 'ans': '15'},
           date: iso(today()),
           timeSec: t,
-          correct: 14,
-          total: 15,
         ),
       );
     }

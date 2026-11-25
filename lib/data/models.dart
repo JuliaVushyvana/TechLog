@@ -180,8 +180,6 @@ class TrainerResult {
     required this.settings,
     required this.date,
     required this.timeSec,
-    this.correct,
-    this.total,
   });
 
   final String id;
@@ -190,8 +188,6 @@ class TrainerResult {
   final Map<String, String> settings;
   final String date;
   final double timeSec;
-  final int? correct;
-  final int? total;
 
   Map<String, dynamic> toJson() => {
     'id': id,
@@ -200,8 +196,6 @@ class TrainerResult {
     'settings': settings,
     'date': date,
     'timeSec': timeSec,
-    'correct': correct,
-    'total': total,
   };
 
   factory TrainerResult.fromJson(Map<String, dynamic> j) => TrainerResult(
@@ -211,8 +205,6 @@ class TrainerResult {
     settings: Map<String, String>.from(j['settings'] ?? const {}),
     date: j['date'],
     timeSec: (j['timeSec'] as num).toDouble(),
-    correct: j['correct'],
-    total: j['total'],
   );
 }
 

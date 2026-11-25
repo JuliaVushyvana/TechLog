@@ -147,8 +147,6 @@ void seedDemoData(AppStore store) {
           settings: {..._flash},
           date: l.date,
           timeSec: _round(base * pow(.96, k) + rnd.nextDouble() * 4),
-          correct: min(20, 14 + k ~/ 2 + rnd.nextInt(2)),
-          total: 20,
         ),
       );
       if (rnd.nextBool()) {

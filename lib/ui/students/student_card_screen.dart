@@ -229,7 +229,6 @@ class _ResultsTab extends StatelessWidget {
           contentPadding: EdgeInsets.zero,
           title: Text('${t.name} · ${fmtSec(r.timeSec)} с', style: const TextStyle(fontWeight: FontWeight.w800)),
           subtitle: Text('${fd(r.date)} · ${t.settingsLabel(r.settings)}'),
-          trailing: r.correct == null ? null : Text('${r.correct}${r.total == null ? '' : ' з ${r.total}'}'),
         );
       },
     );

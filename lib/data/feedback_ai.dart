@@ -120,13 +120,10 @@ String buildUserPrompt(FeedbackData d) {
       final a = e.value;
       final best = a.map((r) => r.timeSec).reduce(min);
       final change = a.length > 1 ? ((a.first.timeSec - a.last.timeSec) / a.first.timeSec * 100).round() : null;
-      final correct = a.last.correct == null
-          ? ''
-          : ', правильно в останній спробі ${a.last.correct}/${a.last.total ?? '?'}';
       b.writeln(
         '- ${e.key}: спроб ${a.length}, перший час ${fmtSec(a.first.timeSec)} с, '
         'останній ${fmtSec(a.last.timeSec)} с, найкращий ${fmtSec(best)} с'
-        '${change == null ? '' : ', зміна ${change >= 0 ? 'швидше' : 'повільніше'} на ${change.abs()}%'}$correct',
+        '${change == null ? '' : ', зміна ${change >= 0 ? 'швидше' : 'повільніше'} на ${change.abs()}%'}',
       );
     }
   }
