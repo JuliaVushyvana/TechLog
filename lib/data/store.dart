@@ -23,7 +23,12 @@ class AppStore extends ChangeNotifier {
   List<TrainerResult> results = [];
   Map<String, FeedbackDoc> feedbacks = {};
 
-  Future<void> load() async {
+  Future<void>? _loading;
+
+  /// Завантажує дані один раз; повторні виклики чекають на те саме завантаження.
+  Future<void> load() => _loading ??= _load();
+
+  Future<void> _load() async {
     final id = teacherId;
     if (id != null) {
       final j = await _repo.load(id);
