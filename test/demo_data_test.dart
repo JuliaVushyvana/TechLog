@@ -78,4 +78,16 @@ void main() {
       expect(tester.takeException(), isNull);
     });
   }
+
+  test('демо-акаунт уже зареєстрований і заповнюється при першому вході', () async {
+    final c = await container();
+    final auth = c.read(authProvider);
+    await auth.init();
+    await auth.login(email: demoEmail, password: demoPassword);
+    final store = c.read(storeProvider);
+    await store.load();
+    await Future<void>.delayed(Duration.zero);
+    expect(auth.user?.name, demoName);
+    expect(store.students, hasLength(10));
+  });
 }

@@ -17,6 +17,15 @@ class AppStore extends ChangeNotifier {
   final String? teacherId;
 
   bool loaded = false;
+  bool _disposed = false;
+  bool get isDisposed => _disposed;
+
+  @override
+  void dispose() {
+    _disposed = true;
+    super.dispose();
+  }
+
   List<Student> students = [];
   List<Lesson> lessons = [];
   List<Schedule> schedules = [];

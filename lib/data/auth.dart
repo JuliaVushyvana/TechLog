@@ -4,6 +4,7 @@ import 'package:crypto/crypto.dart';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'demo_data.dart';
 import 'models.dart';
 
 class AppUser {
@@ -46,6 +47,13 @@ class LocalAuthService extends AuthService {
 
   bool _ready = false;
   AppUser? _user;
+  bool _disposed = false;
+
+  @override
+  void dispose() {
+    _disposed = true;
+    super.dispose();
+  }
 
   @override
   bool get ready => _ready;
@@ -64,11 +72,29 @@ class LocalAuthService extends AuthService {
   Future<void> init() async {
     // Коротка пауза, щоб splash встиг показатися.
     await Future<void>.delayed(const Duration(milliseconds: 1200));
+    if (_disposed) return;
+    if (kDebugMode) await _ensureDemoAccount();
     final email = _prefs.getString(_sessionKey);
     final u = email == null ? null : _users[email];
     _user = u == null ? null : _toUser(email!, u);
     _ready = true;
     notifyListeners();
+  }
+
+  /// Debug: демо-акаунт вчителя зареєстрований одразу, щоб у нього можна було
+  /// просто увійти. Тестові дані додаються при першому вході (див. storeProvider).
+  Future<void> _ensureDemoAccount() async {
+    final users = _users;
+    if (users.containsKey(demoEmail)) return;
+    final salt = newId();
+    users[demoEmail] = {
+      'id': newId(),
+      'name': demoName,
+      'salt': salt,
+      'hash': _hash(salt, demoPassword),
+      'createdAt': DateTime.now().toIso8601String(),
+    };
+    await _saveUsers(users);
   }
 
   @override
