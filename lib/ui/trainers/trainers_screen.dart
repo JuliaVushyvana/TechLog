@@ -195,22 +195,21 @@ class _TrainersScreenState extends ConsumerState<TrainersScreen> {
                 label: const Text('Як минулого разу'),
               ),
             ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: TextFormField(
-                    controller: _time,
-                    decoration: const InputDecoration(labelText: 'Час, с'),
-                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                    inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9.,]'))],
-                    validator: (v) {
-                      final t = double.tryParse((v ?? '').replaceAll(',', '.'));
-                      return t == null || t <= 0 ? 'Введіть час' : null;
-                    },
-                  ),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: SizedBox(
+                width: 140,
+                child: TextFormField(
+                  controller: _time,
+                  decoration: const InputDecoration(labelText: 'Час, с'),
+                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                  inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9.,]'))],
+                  validator: (v) {
+                    final t = double.tryParse((v ?? '').replaceAll(',', '.'));
+                    return t == null || t <= 0 ? 'Введіть час' : null;
+                  },
                 ),
-              ],
+              ),
             ),
             const SizedBox(height: 14),
             FilledButton(onPressed: () => _save(store), child: const Text('Зберегти результат')),
